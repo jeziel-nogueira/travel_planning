@@ -1,0 +1,19 @@
+{
+  "plans_model": [
+    {
+      "state": "",
+      "title":"",
+      "description":"",
+      "destiny":"",
+      "cost":"",
+      "selectedActivities":[
+        {
+          "activityName": "",
+          "state": ""
+        }
+      ]
+    }
+  ],
+  "ongoingPlans": [],
+  "pastPlans": []
+}

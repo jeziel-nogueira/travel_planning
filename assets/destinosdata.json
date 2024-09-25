@@ -1,0 +1,70 @@
+{
+  "destinos": [
+    {
+      "id": 1,
+      "nome": "Brasil",
+      "descricao": "Um país tropical com belas praias e florestas exuberantes.",
+      "custoViagem": 5000.00,
+      "thumbnail": "url_thumbnail_brasil.jpg",
+      "imagens": [
+        "url_imagem1_brasil.jpg",
+        "url_imagem2_brasil.jpg"
+      ],
+      "atividades": [
+        {
+          "nome": "Visitar o Cristo Redentor",
+          "descricao": "Uma visita ao famoso Cristo Redentor no Rio de Janeiro.",
+          "custo": 100.00,
+          "thumbnail": "url_thumbnail_cristo.jpg",
+          "imagens": [
+            "url_imagem1_cristo.jpg",
+            "url_imagem2_cristo.jpg"
+          ]
+        },
+        {
+          "nome": "Explorar a Amazônia",
+          "descricao": "Uma expedição pela maior floresta tropical do mundo.",
+          "custo": 1500.00,
+          "thumbnail": "url_thumbnail_amazonia.jpg",
+          "imagens": [
+            "url_imagem1_amazonia.jpg",
+            "url_imagem2_amazonia.jpg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "nome": "França",
+      "descricao": "O coração da Europa, conhecido por sua rica história e gastronomia.",
+      "custoViagem": 3000.00,
+      "thumbnail": "url_thumbnail_franca.jpg",
+      "imagens": [
+        "url_imagem1_franca.jpg",
+        "url_imagem2_franca.jpg"
+      ],
+      "atividades": [
+        {
+          "nome": "Visitar a Torre Eiffel",
+          "descricao": "Uma visita ao monumento mais icônico da França.",
+          "custo": 25.00,
+          "thumbnail": "url_thumbnail_eiffel.jpg",
+          "imagens": [
+            "url_imagem1_eiffel.jpg",
+            "url_imagem2_eiffel.jpg"
+          ]
+        },
+        {
+          "nome": "Passeio pelo Louvre",
+          "descricao": "Um passeio pelo maior museu do mundo, o Louvre.",
+          "custo": 50.00,
+          "thumbnail": "url_thumbnail_louvre.jpg",
+          "imagens": [
+            "url_imagem1_louvre.jpg",
+            "url_imagem2_louvre.jpg"
+          ]
+        }
+      ]
+    }
+  ]
+}

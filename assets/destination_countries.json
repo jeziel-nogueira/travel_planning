@@ -1,0 +1,112 @@
+{
+  "countries": [
+    {
+      "id": 1,
+      "name": "Brasil",
+      "description": "Um país tropical com belas praias e florestas exuberantes.",
+      "cost": 1200.00,
+      "thumbnail": "url_thumbnail_brasil.jpg",
+      "images": "assets/images/brasil/brasil.jpg",
+      "activities": [
+        {
+          "name": "Florianopolis",
+          "description": "A capital do estado de Santa Catarina é uma das cidades mais visitadas do Brasil.",
+          "cost": 15800.00,
+          "thumbnail": "url_thumbnail_cristo.jpg",
+          "images": "assets/images/brasil/images/florianopolis.jpg"
+        },
+        {
+          "name": "Ouro Preto",
+          "description": "Ouro Preto é uma cidade histórica que tem grande importância para a preservação da história do Brasil.",
+          "cost": 1500.00,
+          "thumbnail": "url_thumbnail_amazonia.jpg",
+          "images": "assets/images/brasil/images/ouro_preto.jpg"
+        },
+        {
+          "name": "Rio de Janeiro",
+          "description": "Cartão-postal do país, a cidade do Rio de Janeiro é o principal destino procurado pelos visitantes estrangeiros.",
+          "cost": 2500.00,
+          "thumbnail": "url_thumbnail_amazonia.jpg",
+          "images": "assets/images/brasil/images/rio_de_janeiro.jpg"
+        },
+        {
+          "name": "Salvador",
+          "description": "Primeira capital do Brasil, Salvador abriga uma enorme riqueza natural e cultural.",
+          "cost": 2900.00,
+          "thumbnail": "url_thumbnail_amazonia.jpg",
+          "images": "assets/images/brasil/images/salvador.png"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "França",
+      "description": "O coração da Europa, conhecido por sua rica história e gastronomia.",
+      "cost": 4000.00,
+      "thumbnail": "url_thumbnail_franca.jpg",
+      "images": "assets/images/franca/franca.jpg",
+      "activities": [
+        {
+          "name": "Visitar a Torre Eiffel",
+          "description": "Uma visita ao monumento mais icônico da França.",
+          "cost": 900.00,
+          "thumbnail": "url_thumbnail_eiffel.jpg",
+          "images": "assets/images/franca/images/torre_eiffel.jpg"
+        },
+        {
+          "name": "Passeio pelo Louvre",
+          "description": "Um passeio pelo maior museu do mundo, o Louvre.",
+          "cost": 350.00,
+          "thumbnail": "url_thumbnail_louvre.jpg",
+          "images": "assets/images/franca/images/louvre.jpg"
+        },
+        {
+          "name": "Castelo de Chambord",
+          "description": "Um dos pontos turísticos mais bonitos da França, é um local que vale a pena incluir no roteiro.",
+          "cost": 600.00,
+          "thumbnail": "url_thumbnail_louvre.jpg",
+          "images": "assets/images/franca/images/castelo_de_chambord.jpg"
+        },
+        {
+          "name": "Mont Saint-Michel",
+          "description": "Mont Saint-Michel é um dos locais mais visitados para quem realiza um roteiro na França e é listado como Patrimônio Mundial da Unesco.",
+          "cost": 700.00,
+          "thumbnail": "url_thumbnail_louvre.jpg",
+          "images": "assets/images/franca/images/mont_saint_michel.jpg"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Tailândia",
+      "description": "O coração da Europa, conhecido por sua rica história e gastronomia.",
+      "cost": 2700.00,
+      "thumbnail": "url_thumbnail_franca.jpg",
+      "images": "assets/images/tailandia/tailandia.jpg",
+      "activities": [
+        {
+          "name": "Koh Lipe",
+          "description": "Uma das melhores coisas que você deve fazer em Koh Lipe é pegar um barco para as pequenas ilhas para apreciar os belos recifes de corais e a vida marinha.",
+          "cost": 750.00,
+          "thumbnail": "url_thumbnail_eiffel.jpg",
+          "images": "assets/images/tailandia/images/koh_lipe.jpg"
+        },
+        {
+          "name": "Sukhothai",
+          "description": "O nome “Sukhothai” significa literalmente o começo da felicidade.",
+          "cost": 400.00,
+          "thumbnail": "url_thumbnail_eiffel.jpg",
+          "images": "assets/images/tailandia/images/sukhothai.jpg"
+        },
+        {
+          "name": "Ilhas Similan",
+          "description": "Jogue um jogo ensolarado e salgado nas Ilhas Similan, um parque marinho de tirar o fôlego, famoso por mergulho de classe mundial, mergulho com snorkel e praias pitorescas.",
+          "cost": 930.00,
+          "thumbnail": "url_thumbnail_eiffel.jpg",
+          "images": "assets/images/tailandia/images/similian.jpg"
+
+        }
+      ]
+    }
+  ]
+}
