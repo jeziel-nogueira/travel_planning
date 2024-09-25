@@ -264,6 +264,7 @@ class _TripPlansPage extends State<TripPlansListPage>
     Text('Load Past Plasns or You not have old plans')
         : Center(
       child: Container(
+        color: Theme.of(context).colorScheme.secondary,
         height: 500,
         child: ListView.builder(
           itemCount: _pastPlans.length,
