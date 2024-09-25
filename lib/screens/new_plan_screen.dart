@@ -30,8 +30,9 @@ class _NewPlanScreen extends State<NewPlanScreen> {
   DateTime? endDate;
   String? _selectedCountry;
   Map<String, dynamic>? _selectedPlaceData;
-  int budget = 0;
-  final NumberFormat currencyFormatter = NumberFormat.currency(locale: 'pt_BR', symbol: '\$');
+  double budget = 0;
+  final NumberFormat currencyFormatter =
+      NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
   ScrollController _controller = ScrollController();
 
   // int dia = data.day;
@@ -43,8 +44,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
   List _items = [];
   List _ongoingPlans = [];
   List _pastPlans = [];
-  List<String> _selectedActivities = [];
-  Activity? activityObj;
+  final List<String> _selectedActivities = [];
 
   Future<void> readJson() async {
     final String response =
@@ -118,7 +118,11 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                         style: GoogleFonts.robotoCondensed(
                           fontWeight: FontWeight.w600,
                           fontSize: 18,
-                          color: Theme.of(context).appBarTheme.titleTextStyle?.color ?? Colors.black,
+                          color: Theme.of(context)
+                                  .appBarTheme
+                                  .titleTextStyle
+                                  ?.color ??
+                              Colors.black,
                         ),
                       ),
                       Text(
@@ -126,7 +130,11 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                         style: GoogleFonts.robotoCondensed(
                           fontWeight: FontWeight.w500,
                           fontSize: 14,
-                          color: Theme.of(context).appBarTheme.titleTextStyle?.color ?? Colors.black,
+                          color: Theme.of(context)
+                                  .appBarTheme
+                                  .titleTextStyle
+                                  ?.color ??
+                              Colors.black,
                         ),
                       ),
                       SizedBox(height: 20),
@@ -141,7 +149,9 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                     style: GoogleFonts.robotoCondensed(
                       fontWeight: FontWeight.w500,
                       fontSize: 18,
-                      color: Theme.of(context).appBarTheme.titleTextStyle?.color ?? Colors.black,
+                      color:
+                          Theme.of(context).appBarTheme.titleTextStyle?.color ??
+                              Colors.black,
                     ),
                   ),
                   TextFormField(
@@ -162,7 +172,6 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                     decoration: const InputDecoration(
                       hintText: 'Adcione uma descrição',
                       labelText: 'Descrição da viagem',
-
                     ),
                   ),
 
@@ -199,12 +208,10 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                                   setState(() {
                                     endDate = end;
                                     startDate = start;
-                                    print(endDate);
-                                    print(startDate);
                                     Timer(
                                         Duration(milliseconds: 300),
-                                            () => _controller
-                                            .jumpTo(_controller.position.maxScrollExtent));
+                                        () => _controller.jumpTo(_controller
+                                            .position.maxScrollExtent));
                                   });
                                 },
                                 onCancelClick: () {
@@ -236,7 +243,11 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                                   style: GoogleFonts.robotoCondensed(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 18,
-                                    color: Theme.of(context).appBarTheme.titleTextStyle?.color ?? Colors.black,
+                                    color: Theme.of(context)
+                                            .appBarTheme
+                                            .titleTextStyle
+                                            ?.color ??
+                                        Colors.black,
                                   ),
                                 ),
                                 SizedBox(width: 20),
@@ -245,7 +256,11 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                                   style: GoogleFonts.robotoCondensed(
                                     fontWeight: FontWeight.w500,
                                     fontSize: 18,
-                                    color: Theme.of(context).appBarTheme.titleTextStyle?.color ?? Colors.black,
+                                    color: Theme.of(context)
+                                            .appBarTheme
+                                            .titleTextStyle
+                                            ?.color ??
+                                        Colors.black,
                                   ),
                                 ),
                               ],
@@ -258,98 +273,143 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                 ],
               ),
               SizedBox(height: 18),
-              Text(
-                'Já podemos escolher o destino?',
-                style: GoogleFonts.robotoCondensed(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
-                  color: Theme.of(context).appBarTheme.titleTextStyle?.color ?? Colors.black,
-                ),
-              ),
+              _selectedCountry == null
+                  ? Text(
+                      'Já podemos escolher o destino?',
+                      style: GoogleFonts.robotoCondensed(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                        color: Theme.of(context)
+                                .appBarTheme
+                                .titleTextStyle
+                                ?.color ??
+                            Colors.black,
+                      ),
+                    )
+                  : SizedBox(height: 10),
               _items.isNotEmpty
                   ? DropdownButton<String>(
-                value: _selectedCountry,
-                hint: Text("Selecione um destino", style: TextStyle(color: Theme.of(context).appBarTheme.titleTextStyle?.color ?? Colors.black,),),
-                isExpanded: true,
-                dropdownColor: Theme.of(context).scaffoldBackgroundColor,
-                items: _items.map<DropdownMenuItem<String>>((item) {
-                  return DropdownMenuItem<String>(
-                    value: item['name'],
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: 60,
-                          height: 45,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(item['images']),
-                            ),
-                          ),
+                      value: _selectedCountry,
+                      hint: Text(
+                        "Selecione um destino",
+                        style: TextStyle(
+                          color: Theme.of(context)
+                                  .appBarTheme
+                                  .titleTextStyle
+                                  ?.color ??
+                              Colors.black,
                         ),
-                        Text(item['name']),
-                        GestureDetector(
-                          onTap: () async {
-                            await _navigateToPlaceScreen(item);
-                          },
-                          child: Container(
-                            width: 30,
-                            height: 30,
-                            color: Colors.transparent,
-                            child: Icon(Icons.arrow_circle_right_outlined, color: Theme.of(context).iconTheme.color,),
+                      ),
+                      isExpanded: true,
+                      dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                      items: _items.map<DropdownMenuItem<String>>((item) {
+                        return DropdownMenuItem<String>(
+                          value: item['name'],
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                width: 60,
+                                height: 45,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage(item['images']),
+                                  ),
+                                ),
+                              ),
+                              Text(item['name']),
+                              GestureDetector(
+                                onTap: () async {
+                                  await _navigateToPlaceScreen(item);
+                                },
+                                child: Container(
+                                  width: 30,
+                                  height: 30,
+                                  color: Colors.transparent,
+                                  child: Icon(
+                                    Icons.arrow_circle_right_outlined,
+                                    color: Theme.of(context).iconTheme.color,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList(),
-                selectedItemBuilder: (BuildContext context) {
-                  return _items.map<Widget>((item) {
-                    return Text(item['name']);
-                  }).toList();
-                },
-                onChanged: (String? newValue) {
-                  setState(() {
-                    Timer(
-                        Duration(milliseconds: 300),
-                            () => _controller
-                            .jumpTo(_controller.position.maxScrollExtent));
-                    if(_selectedCountry != newValue){
-                      _activitiesList = [];
-                      _activitiesListContent = [];
-                      budget = 0;
-                    }
+                        );
+                      }).toList(),
+                      selectedItemBuilder: (BuildContext context) {
+                        return _items.map<Widget>((item) {
+                          return Text(item['name']);
+                        }).toList();
+                      },
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _selectedCountry = newValue;
+                          // Encontre o item correspondente pelo nome e obtenha o custo
+                          var selectedItem = _items.firstWhere(
+                            (item) => item['name'] == _selectedCountry,
+                            orElse: () => null,
+                          );
 
-                    _selectedCountry = newValue;
-                    // Encontre o item correspondente pelo nome e obtenha o custo
-                    var selectedItem = _items.firstWhere(
-                          (item) => item['name'] == _selectedCountry,
-                      orElse: () => null,
-                    );
+                          _selectedPlaceData = _items.firstWhere(
+                              (item) => item['name'] == newValue,
+                              orElse: () => null);
 
-                    // Atualize o budget com o custo encontrado, verificando se o item existe
-                    if (selectedItem != null && selectedItem['cost'] is int) {
-                      budget = selectedItem['cost'] as int;
-                    } else {
-                      budget = 0; // Caso o item ou custo não seja encontrado
-                    }
-                    _selectedPlaceData = _items.firstWhere(
-                            (item) => item['name'] == newValue,
-                        orElse: () => null);
-                  });
-                },
-              )
+                          Timer(
+                              Duration(milliseconds: 300),
+                              () => _controller.jumpTo(
+                                  _controller.position.maxScrollExtent));
+                          if (_selectedCountry != newValue) {
+                            _activitiesList = [];
+                            _activitiesListContent = [];
+                            budget = 0;
+                          } else {
+                            budget = selectedItem['cost'];
+                          }
+                        });
+                      },
+                    )
                   : const CircularProgressIndicator(),
               const SizedBox(height: 20),
-              Text(
-                _selectedPlaceData != null
-                    ? "Local Selecionado: ${_selectedPlaceData!['name']}"
-                    : "Nenhum local selecionado",
-                style: TextStyle(color: Theme.of(context).appBarTheme.titleTextStyle?.color ?? Colors.black,),
-              ),
-              SizedBox(height: 12),
+
+              _selectedPlaceData != null
+                  ? Container(
+                      width: 300, // Largura da imagem
+                      height: 100, // Altura da imagem
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 150, // Largura da imagem
+                            height: 90, // Altura da imagem
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                  8), // Bordas arredondadas
+                              image: DecorationImage(
+                                fit: BoxFit
+                                    .cover, // Ajusta a imagem para cobrir o espaço disponível
+                                image:
+                                    AssetImage(_selectedPlaceData!['images']),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(_selectedPlaceData!['name']),
+                                Text(currencyFormatter
+                                    .format(_selectedPlaceData!['cost']))
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Text('data'),
+              const SizedBox(height: 12),
               // Center(
               //   child: _selectedPlaceData != null
               //       ? Container(
@@ -398,81 +458,86 @@ class _NewPlanScreen extends State<NewPlanScreen> {
               Container(
                 padding: EdgeInsets.all(10),
                 child: Column(
-                  children: List.generate(_activitiesListContent.length, (index) => _activitiesListContent[index]),
+                  children: List.generate(_activitiesListContent.length,
+                      (index) => _activitiesListContent[index]),
                 ),
               ),
               Center(
                 child: _selectedPlaceData != null
                     ? Column(
-                  children: [
-                    Container(
-                      child: GestureDetector(
-                        onTap: (){
-                          addNewActivity();
-                          Timer(
-                              Duration(milliseconds: 300),
-                                  () => _controller
-                                  .jumpTo(_controller.position.maxScrollExtent));
-                        },
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            color: Colors.black26,
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(4),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.add_circle_outline,
-                                  color: Theme.of(context).iconTheme.color,
+                        children: [
+                          Container(
+                            child: GestureDetector(
+                              onTap: () {
+                                addNewActivity();
+                                Timer(
+                                    Duration(milliseconds: 300),
+                                    () => _controller.jumpTo(
+                                        _controller.position.maxScrollExtent));
+                              },
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  color: Colors.black26,
                                 ),
-                                SizedBox(width: 5),
+                                child: Padding(
+                                  padding: EdgeInsets.all(4),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.add_circle_outline,
+                                        color:
+                                            Theme.of(context).iconTheme.color,
+                                      ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        'Adicionar nova atividade',
+                                        style: GoogleFonts.getFont(
+                                            'Roboto Condensed',
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 14,
+                                            color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: 20),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    'Custo',
+                                    style: GoogleFonts.getFont(
+                                        'Roboto Condensed',
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                        color: Colors.black38),
+                                  ),
+                                ),
                                 Text(
-                                  'Adicionar nova atividade',
-                                  style: GoogleFonts.getFont('Roboto Condensed',
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 14,
-                                      color: Colors.white),
+                                  currencyFormatter.format(budget),
+                                  style: GoogleFonts.getFont(
+                                    'Montserrat',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.green,
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Text(
-                              'Custo',
-                              style: GoogleFonts.getFont('Roboto Condensed',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14,
-                                  color: Colors.black38),
-                            ),
-                          ),
-                          Text(
-                            currencyFormatter.format(budget),
-                            style: GoogleFonts.getFont(
-                              'Montserrat',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.green,
-                            ),
-                          ),
                         ],
-                      ),
-                    ),
-                  ],
-                )
-                    :SizedBox(height: 20),
+                      )
+                    : SizedBox(height: 20),
               ),
             ],
           ),
@@ -480,20 +545,27 @@ class _NewPlanScreen extends State<NewPlanScreen> {
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
           onTap: (index) async {
-            index == 0 ? Navigator.pop(context) : savePlan(generatePlan());
+            if(index == 0){
+              Navigator.pop(context);
+            }else{
+              savePlan(generatePlan());
+              Timer(
+                  Duration(milliseconds: 500),
+                      () => {Navigator.pop(context)});
+            }
           },
           //fixedColor: Colors.cyan,
           currentIndex: 0,
           //unselectedItemColor: Colors.black38,
           items: [
             BottomNavigationBarItem(
-                icon: Icon(
-                    Icons.arrow_circle_left_outlined,
-                color: Theme.of(context).iconTheme.color),
+                icon: Icon(Icons.arrow_circle_left_outlined,
+                    color: Theme.of(context).iconTheme.color),
                 label: ''),
             BottomNavigationBarItem(
                 icon: Icon(Icons.save_alt_rounded,
-                color: Theme.of(context).iconTheme.color), label: ''),
+                    color: Theme.of(context).iconTheme.color),
+                label: ''),
           ],
         ),
       ),
@@ -503,8 +575,6 @@ class _NewPlanScreen extends State<NewPlanScreen> {
   List<Widget> _activitiesList = [];
   List<Widget> _activitiesListContent = [];
   bool isChecked = false;
-  double _budget = 0.0;
-
 
   void addNewActivity() {
     _activitiesList.add(activityEmpty(_activitiesList.length));
@@ -519,7 +589,8 @@ class _NewPlanScreen extends State<NewPlanScreen> {
       child: Row(
         children: [
           Container(
-            margin: const EdgeInsets.symmetric(vertical: 5), // Espaçamento entre as atividades
+            margin: const EdgeInsets.symmetric(
+                vertical: 5), // Espaçamento entre as atividades
             width: MediaQuery.of(context).size.width * 0.7,
             height: 60,
             decoration: const BoxDecoration(
@@ -538,19 +609,28 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                   ),
                   child: GestureDetector(
                     onTap: () async {
-                      print('set activity ${index}');
-                      await _navigateToActivityScreen(_selectedPlaceData!, index);
+                      await _navigateToActivityScreen(
+                          _selectedPlaceData!, index);
                     },
                     child: Row(
                       children: [
-                        Icon(Icons.add_circle_outline_rounded, color: Theme.of(context).iconTheme.color,),
+                        Icon(
+                          Icons.add_circle_outline_rounded,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
                         const SizedBox(width: 10),
                         Text(
                           'Slecione uma atividade',
-                          style: GoogleFonts.getFont('Roboto Condensed',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                              color: Theme.of(context).appBarTheme.titleTextStyle?.color ?? Colors.black,),
+                          style: GoogleFonts.getFont(
+                            'Roboto Condensed',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 14,
+                            color: Theme.of(context)
+                                    .appBarTheme
+                                    .titleTextStyle
+                                    ?.color ??
+                                Colors.black,
+                          ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -572,7 +652,8 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                       color: Colors.blue.shade50,
                       borderRadius: BorderRadius.all(Radius.circular(5)),
                     ),
-                    child: Icon(Icons.delete, color: Theme.of(context).iconTheme.color),
+                    child: Icon(Icons.delete,
+                        color: Theme.of(context).iconTheme.color),
                   ),
                 )
               ],
@@ -583,22 +664,62 @@ class _NewPlanScreen extends State<NewPlanScreen> {
     );
   }
 
-  Widget setActivity(int index, String name){
-    print(name);
-    print(_activitiesListContent);
-    print(_activitiesList);
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.7,
-      height: 60,
-      decoration: const BoxDecoration(
-        color: Colors.black12,
-        borderRadius: BorderRadius.all(Radius.circular(5)),
+  Widget setActivity(int index, Map<String, dynamic> activity) {
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Row(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width * 0.2,
+            height: MediaQuery.of(context).size.height * 0.1,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                  bottomRight: Radius.zero,
+                  bottomLeft: Radius.circular(10),
+                  topRight: Radius.zero,
+                  topLeft: Radius.circular(10)),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage(activity['images']),
+              ),
+            ),
+          ),
+          SizedBox(width: 5),
+          Container(
+            width: MediaQuery.of(context).size.width * 0.45,
+            height: MediaQuery.of(context).size.height * 0.1,
+            decoration: const BoxDecoration(
+              color: Colors.black12,
+              borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(10),
+                  bottomLeft: Radius.zero,
+                  topRight: Radius.circular(10),
+                  topLeft: Radius.zero),
+            ),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Text(activity['name']),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(5),
+                  child: Text(
+                    activity['description'],
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      child: Text(name),
     );
   }
 
-  Future<void> _navigateToActivityScreen(Map<String, dynamic> place, int index) async {
+  Future<void> _navigateToActivityScreen(
+      Map<String, dynamic> place, int index) async {
     // Navega para a página de detalhes e aguarda o retorno de um resultado
     final activity = await Navigator.push(
       context,
@@ -607,48 +728,38 @@ class _NewPlanScreen extends State<NewPlanScreen> {
       ),
     );
 
-
-
     // Atualiza o estado se um local foi selecionado
     if (activity != null) {
       setState(() {
-        _activitiesList[index] = setActivity(index, activity['name']);
-        budget = budget + (activity['cost'] as int);
-        List<String> ac = [activity['name'], activity['ongoing']];
-        _selectedActivities[index] = ac.toString();
+        _activitiesList[index] = setActivity(index, activity);
+        budget = budget + (activity['cost']);
+        _selectedActivities.add(activity['name']);
       });
     }
   }
 
-
-
-
   readPlans() async {
     final String response =
-    await rootBundle.loadString('assets/travel_plans.json');
+        await rootBundle.loadString('assets/travel_plans.json');
     final data = await json.decode(response);
     setState(() {
       _ongoingPlans = data['ongoingPlans'];
       _pastPlans = data['pastPlans'];
-      print(_ongoingPlans);
-      print(_pastPlans);
     });
   }
 
-
-  TravelPlan generatePlan(){
+  TravelPlan generatePlan() {
     return TravelPlan(
       state: 'ongoing',
       title: "Viagem para a Praia",
       description: "Um plano de viagem incrível para a praia.",
       destiny: _selectedCountry!,
-      cost: _budget.toString(),
+      cost: budget.toString(),
       endDate: endDate.toString(),
       startDate: startDate.toString(),
-      //selectedActivities: _selectedActivities,
+      selectedActivities: _selectedActivities,
     );
   }
-
 
   Future<void> savePlan(TravelPlan plan) async {
     final directory = await getApplicationDocumentsDirectory();
@@ -666,13 +777,13 @@ class _NewPlanScreen extends State<NewPlanScreen> {
       jsonData = json.decode(contents);
     }
 
-    // Verifica se já existe um plano com o mesmo título
     bool planExists = false;
 
     for (var i = 0; i < jsonData['ongoingPlans'].length; i++) {
       if (jsonData['ongoingPlans'][i]['title'] == plan.title) {
         // Se encontrar um plano com o mesmo título, atualiza
         jsonData['ongoingPlans'][i] = plan.toJson();
+        print('PLANO ATUALIZADO:');
         planExists = true;
         break;
       }
@@ -680,19 +791,16 @@ class _NewPlanScreen extends State<NewPlanScreen> {
 
     // Se não existir, adiciona o novo plano
     if (!planExists) {
+      print('NOVO PLANO:');
       jsonData['ongoingPlans'].add(plan.toJson());
     }
 
-    print('NOVO ou ATUALIZADO:');
     print(jsonData);
 
     // Salva o JSON atualizado de volta no arquivo
     await file.writeAsString(json.encode(jsonData));
   }
-
-
 }
-
 
 class TravelPlan {
   String state;
@@ -702,7 +810,7 @@ class TravelPlan {
   String cost;
   String startDate;
   String endDate;
-  //List<String> selectedActivities;
+  List<String> selectedActivities;
 
   TravelPlan({
     required this.state,
@@ -712,7 +820,7 @@ class TravelPlan {
     required this.cost,
     required this.startDate,
     required this.endDate,
-    //required this.selectedActivities,
+    required this.selectedActivities,
   });
 
   Map<String, dynamic> toJson() {
@@ -723,23 +831,11 @@ class TravelPlan {
       'destiny': destiny,
       'cost': cost,
       'startDate': startDate,
-      'endDate' : endDate,
-     // 'selectedActivities': selectedActivities.map((a) => a.toJson()).toList(),
+      'endDate': endDate,
+      // Converte selectedActivities em um Map de chave-valor
+      'selectedActivities': {
+        for (var activity in selectedActivities) activity: 'ongoing'
+      },
     };
   }
 }
-
-class Activity {
-  String activityName;
-  String state;
-
-  Activity({required this.activityName, required this.state});
-
-  Map<String, dynamic> toJson() {
-    return {
-      'activityName': activityName,
-      'state': state,
-    };
-  }
-}
-

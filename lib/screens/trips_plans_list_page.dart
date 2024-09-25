@@ -202,20 +202,26 @@ class _TripPlansPage extends State<TripPlansListPage>
   Widget OngoingPlans() {
     print('_items');
     print(_ongoingPlans);
-    return
-    Center(
-      child: _ongoingPlans != null
+    return Center(
+      child: _ongoingPlans != null && _ongoingPlans.isNotEmpty
           ? Container(
         height: 500,
         child: ListView.builder(
           itemCount: _ongoingPlans.length,
           itemBuilder: (context, index) {
             var activity = _ongoingPlans[index];
+            print(activity);
+            String title = activity['title'];
+            String description = activity['description'];
+            String cost = activity['cost'];
+            //String imagePath = activity['images'] ?? ''; // Verifique se 'images' é nulo
+
             return Card(
               margin: EdgeInsets.all(5),
               child: ListTile(
-                title: Text(activity['name']),
-                subtitle: Text(activity['description'],
+                title: Text(title),
+                subtitle: Text(
+                  description,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -227,7 +233,7 @@ class _TripPlansPage extends State<TripPlansListPage>
                       color: Colors.yellow,
                     ),
                     SizedBox(height: 20),
-                    Text('R\$ ${activity['cost'].toStringAsFixed(2)}'),
+                    Text(cost),
                   ],
                 ),
                 leading: Container(
@@ -235,19 +241,23 @@ class _TripPlansPage extends State<TripPlansListPage>
                   height: 90, // Altura da imagem
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8), // Bordas arredondadas
-                    image: DecorationImage(
-                      fit: BoxFit.cover, // Ajusta a imagem para cobrir o espaço disponível
-                      image: AssetImage(activity['images']),
-                    ),
+                    // image: imagePath.isNotEmpty
+                    //     ? DecorationImage(
+                    //   fit: BoxFit.cover, // Ajusta a imagem para cobrir o espaço disponível
+                    //   image: AssetImage(imagePath),
+                    // )
+                    //     : null, // Evitar erro se 'images' for nulo
                   ),
                 ),
               ),
             );
           },
         ),
-      ): Text(''),
+      )
+          : Text('Nenhum plano em andamento encontrado.'),
     );
   }
+
 
   Widget PastPlans() {
     return _pastPlans.isEmpty?

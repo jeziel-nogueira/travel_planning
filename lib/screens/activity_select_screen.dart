@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class ActivityDetails extends StatefulWidget {
   final Map<String, dynamic> place;
@@ -13,10 +14,18 @@ class ActivityDetails extends StatefulWidget {
 class _ActivityDetails extends State<ActivityDetails> {
   Map<String, dynamic>? _selectedActivity;
   int? _selectedIndex;
-  int? _selectedCost;
+  double? _selectedCost;
+
+  final NumberFormat currencyFormatter = NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
 
   @override
   void initState() {
+    if(widget.place is String){
+      print('is a String: ${widget.place['cost']}');
+    }
+    if(widget.place is int){
+      print('is a int value: ${widget.place['cost']}');
+    }
     super.initState();
   }
 
@@ -121,7 +130,7 @@ class _ActivityDetails extends State<ActivityDetails> {
                     ),
                     _selectedCost != null
                         ? Text(
-                            '\$${_selectedCost}',
+                            currencyFormatter.format(_selectedCost),
                             style: GoogleFonts.getFont('Montserrat',
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
@@ -135,6 +144,7 @@ class _ActivityDetails extends State<ActivityDetails> {
                 child: _selectedActivity != null
                     ? GestureDetector(
                         onTap: () {
+                          print(_selectedActivity);
                           Navigator.pop(context, _selectedActivity);
                         },
                         child: Container(
@@ -237,7 +247,6 @@ class _ActivityDetails extends State<ActivityDetails> {
                       ],
                     ),
                   ),
-                  SizedBox(width: 10),
                   Center(
                     child: GestureDetector(
                       onTap: () {
