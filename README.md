@@ -1,5 +1,10 @@
 # Travel Planner App
-
+![Android Studio](https://img.shields.io/badge/android%20studio-346ac1?style=for-the-badge&logo=android%20studio&logoColor=white)
+![Flutter](https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white)
+#
+![Sem título](https://github.com/user-attachments/assets/7e15a513-37eb-4b13-a792-b37dc096ce15)
+#
 ## Descrição
 O **Travel Planner** é um aplicativo simples para planejar viagens, permitindo que o usuário adicione destinos, orçamentos e organize um checklist de atividades. Este projeto foi desenvolvido como parte de uma **atividade acadêmica**, com restrições específicas e um prazo de entrega.
 
@@ -55,4 +60,7 @@ O **Travel Planner** é um aplicativo simples para planejar viagens, permitindo 
    $ flutter run
 
 ## Cpturas de Tela
-1
+![Screenshot_20240925_120138](https://github.com/user-attachments/assets/aa68ce1c-2733-4459-8fbb-4b271b7a8fa8)
+![Screenshot_20240925_120226](https://github.com/user-attachments/assets/29e75ec9-c27f-473b-a375-408f490ca0c0)
+![Screenshot_20240925_120424](https://github.com/user-attachments/assets/60ee93c0-516b-4269-b189-7218b9fb3aed)
+![Screenshot_20240925_120317](https://github.com/user-attachments/assets/847d01a3-1c6d-4bb4-a9f3-2a98c705878f)
