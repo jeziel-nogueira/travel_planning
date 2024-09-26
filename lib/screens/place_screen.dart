@@ -8,7 +8,10 @@ import 'package:intl/intl.dart';
 class PlaceScreen extends StatefulWidget {
   final Map<String, dynamic> place;
 
-  const PlaceScreen({super.key, required this.place});
+  const PlaceScreen({
+    super.key,
+    required this.place,
+  });
 
   @override
   State<PlaceScreen> createState() => _PlaceScreen();
@@ -237,7 +240,7 @@ class _PlaceScreen extends State<PlaceScreen> {
                       ),
                     ),
                     Text(
-                      currencyFormatter.format((widget.place['cost'] as int)),
+                      currencyFormatter.format((widget.place['cost'])),
                       style: GoogleFonts.getFont('Montserrat',
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -260,7 +263,7 @@ class _PlaceScreen extends State<PlaceScreen> {
                   ),
                   child: Center(
                     child: Text(
-                      'Selecionar Destino',
+                      'Selecionar como Destino',
                       style: GoogleFonts.getFont("Roboto Condensed",
                           fontWeight: FontWeight.w700,
                           color: Theme.of(context).appBarTheme.titleTextStyle?.color ?? Colors.black,

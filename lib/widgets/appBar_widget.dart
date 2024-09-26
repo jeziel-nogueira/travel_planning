@@ -6,7 +6,7 @@ AppBar buildCustomAppBar(BuildContext context, bool isLightTheme, VoidCallback t
 
   return AppBar(
     title: Text(
-      'My App Trip',
+      'Planos de Viagens',
       style: TextStyle(
         color: Theme.of(context).appBarTheme.titleTextStyle?.color ?? Colors.black,
       ),

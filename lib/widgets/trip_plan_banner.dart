@@ -16,10 +16,10 @@ class TriPlanBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => TripPlanPage(plan: plan)));
-      },
+      // onTap: () {
+      //   Navigator.push(
+      //       context, MaterialPageRoute(builder: (context) => TripPlanPage(plan: plan)));
+      // },
       child: Container(
         padding: EdgeInsets.all(2),
         decoration: BoxDecoration(

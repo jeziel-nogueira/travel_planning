@@ -5,7 +5,16 @@ import 'package:intl/intl.dart';
 
 class TripPlanPage extends StatefulWidget {
   final Map<String, dynamic> plan;
-  const TripPlanPage({super.key, required this.plan});
+  final bool isLightTheme;
+  final VoidCallback toggleTheme;
+
+
+  const TripPlanPage({
+    super.key,
+    required this.plan,
+    required this.isLightTheme,
+    required this.toggleTheme,
+  });
 
   @override
   State<TripPlanPage> createState() => _TripPlan();
@@ -13,7 +22,7 @@ class TripPlanPage extends StatefulWidget {
 
 class _TripPlan extends State<TripPlanPage> {
   bool? isChecked;
-  int? _budget;
+  double? _budget;
   final NumberFormat currencyFormatter = NumberFormat.currency(locale: 'pt_BR', symbol: '\$');
 
   List<Widget> _activitiesList = [];
@@ -49,11 +58,11 @@ class _TripPlan extends State<TripPlanPage> {
           Container(
             width: MediaQuery.of(context).size.width * 0.15,
             height: 90,
-            margin: EdgeInsets.symmetric(vertical: 10), // Espaçamento entre as atividades
-            padding: EdgeInsets.all(5),
+            margin: const EdgeInsets.symmetric(vertical: 10), // Espaçamento entre as atividades
+            padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: Colors.blue.shade50,
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.zero, bottomLeft: Radius.circular(15), bottomRight: Radius.zero),
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.zero, bottomLeft: Radius.circular(15), bottomRight: Radius.zero),
             ),
             child: Center(
               child: Checkbox(
@@ -70,11 +79,11 @@ class _TripPlan extends State<TripPlanPage> {
           Container(
             width: MediaQuery.of(context).size.width * 0.7,
             height: 90,
-            margin: EdgeInsets.symmetric(vertical: 10), // Espaçamento entre as atividades
-            padding: EdgeInsets.all(5),
+            margin: const EdgeInsets.symmetric(vertical: 10), // Espaçamento entre as atividades
+            padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: Colors.blue.shade50,
-              borderRadius: BorderRadius.only(topLeft: Radius.zero, topRight: Radius.circular(15), bottomLeft: Radius.zero, bottomRight: Radius.circular(15)),
+              borderRadius: const BorderRadius.only(topLeft: Radius.zero, topRight: Radius.circular(15), bottomLeft: Radius.zero, bottomRight: Radius.circular(15)),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -115,7 +124,7 @@ class _TripPlan extends State<TripPlanPage> {
   @override
   void initState(){
     super.initState();
-    _budget = int.parse(widget.plan['cost']);
+    _budget = double.parse(widget.plan['cost']);
   }
 
 
@@ -126,7 +135,7 @@ class _TripPlan extends State<TripPlanPage> {
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,7 +150,7 @@ class _TripPlan extends State<TripPlanPage> {
                         borderRadius: BorderRadius.circular(12),
                         image: DecorationImage(
                             image:
-                                AssetImage('assets/images/Coeurdes Alpes.png'),
+                                AssetImage(widget.plan['imgPath']),
                             fit: BoxFit.cover),
                       ),
                       child: Column(
@@ -178,7 +187,7 @@ class _TripPlan extends State<TripPlanPage> {
                         width: MediaQuery.of(context).size.width * 0.94,
                         bottom: 0,
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(topLeft: Radius.zero, topRight: Radius.zero, bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
                             color: Colors.black38,
                           ),
@@ -186,21 +195,21 @@ class _TripPlan extends State<TripPlanPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 10),
                                 child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Coeurdes Alpes',
+                                      widget.plan['destiny'],
                                       style: GoogleFonts.getFont('Montserrat',
                                           fontWeight: FontWeight.w600,
                                           fontSize: 28,
                                           color: Colors.white),
                                     ),
                                     Container(
-                                      padding: EdgeInsets.all(5),
+                                      padding: const EdgeInsets.all(5),
                                       width: MediaQuery.of(context).size.width * 0.85,
 
                                       child: Row(
@@ -212,9 +221,11 @@ class _TripPlan extends State<TripPlanPage> {
                                           Container(
                                               child: Row(
                                             children: [
-                                              Icon(Icons.calendar_month_sharp),
+                                              const Icon(Icons.calendar_month_sharp),
                                               Text(
-                                                '${widget.plan['startDate']} - ${widget.plan['endDate']}',
+
+                                                '${DateFormat('yyyy-MM-dd').format(DateTime.parse(widget.plan['startDate']!))} - '
+                                                    '${DateFormat('yyyy-MM-dd').format(DateTime.parse(widget.plan['endDate']!))}',
                                                 style: GoogleFonts.getFont(
                                                     'Roboto Condensed',
                                                     fontWeight: FontWeight.w700,
@@ -226,7 +237,7 @@ class _TripPlan extends State<TripPlanPage> {
                                           Container(
                                             child: Row(
                                               children: [
-                                                Icon(Icons.people_outline,
+                                                const Icon(Icons.people_outline,
                                                     color: Colors.white),
                                                 Text(
                                                   ' 4',
@@ -251,7 +262,7 @@ class _TripPlan extends State<TripPlanPage> {
                         )),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Container(
 
                   child: Row(
@@ -270,19 +281,19 @@ class _TripPlan extends State<TripPlanPage> {
                           addNewActivity();
                         },
                         child: Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                             color: Colors.black26,
                           ),
                           child: Padding(
-                            padding: EdgeInsets.all(4),
+                            padding: const EdgeInsets.all(4),
                             child: Row(
                               children: [
                                 const Icon(
                                   Icons.add_circle_outline,
                                   color: Colors.white,
                                 ),
-                                SizedBox(width: 5),
+                                const SizedBox(width: 5),
                                 Text(
                                   'Add new activity',
                                   style: GoogleFonts.getFont('Roboto Condensed',
@@ -298,27 +309,27 @@ class _TripPlan extends State<TripPlanPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     children: List.generate(_activitiesListContent.length, (index) => _activitiesListContent[index]),
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
               ],
             ),
           ),
         ),
         bottomNavigationBar: Container(
           height: 80,
-          padding: EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -350,7 +361,7 @@ class _TripPlan extends State<TripPlanPage> {
                 child: Container(
                   height: 60,
                   width: MediaQuery.of(context).size.width / 3,
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: Colors.blue),

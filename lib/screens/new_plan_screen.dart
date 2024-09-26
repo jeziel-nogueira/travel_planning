@@ -671,7 +671,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
         children: [
           Container(
             width: MediaQuery.of(context).size.width * 0.2,
-            height: MediaQuery.of(context).size.height * 0.1,
+            height: MediaQuery.of(context).size.height * 0.12,
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
                   bottomRight: Radius.zero,
@@ -687,7 +687,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
           SizedBox(width: 5),
           Container(
             width: MediaQuery.of(context).size.width * 0.45,
-            height: MediaQuery.of(context).size.height * 0.1,
+            height: MediaQuery.of(context).size.height * 0.12,
             decoration: const BoxDecoration(
               color: Colors.black12,
               borderRadius: BorderRadius.only(
@@ -757,7 +757,9 @@ class _NewPlanScreen extends State<NewPlanScreen> {
       cost: budget.toString(),
       endDate: endDate.toString(),
       startDate: startDate.toString(),
+      destinyID: _selectedPlaceData!['id'].toString(),
       selectedActivities: _selectedActivities,
+      imgPath: _selectedPlaceData!['images']
     );
   }
 
@@ -811,6 +813,8 @@ class TravelPlan {
   String startDate;
   String endDate;
   List<String> selectedActivities;
+  String destinyID;
+  String imgPath;
 
   TravelPlan({
     required this.state,
@@ -821,6 +825,8 @@ class TravelPlan {
     required this.startDate,
     required this.endDate,
     required this.selectedActivities,
+    required this.destinyID,
+  required this.imgPath,
   });
 
   Map<String, dynamic> toJson() {
@@ -832,6 +838,8 @@ class TravelPlan {
       'cost': cost,
       'startDate': startDate,
       'endDate': endDate,
+      'destinyID': destinyID,
+      'imgPath': imgPath,
       // Converte selectedActivities em um Map de chave-valor
       'selectedActivities': {
         for (var activity in selectedActivities) activity: 'ongoing'

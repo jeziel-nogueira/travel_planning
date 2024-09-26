@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:untitled/screens/trip_plan_page.dart';
 import 'new_plan_screen.dart';
 
 class TripPlansListPage extends StatefulWidget {
@@ -24,12 +26,15 @@ class _TripPlansPage extends State<TripPlansListPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
+  final NumberFormat currencyFormatter =
+  NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+
   List _ongoingPlans = [];
   List _pastPlans = [];
 
   Future<void> readJson() async {
     final String response =
-    await rootBundle.loadString('assets/travel_plans.json');
+        await rootBundle.loadString('assets/travel_plans.json');
     final data = await json.decode(response);
     setState(() {
       print(data);
@@ -56,10 +61,8 @@ class _TripPlansPage extends State<TripPlansListPage>
 
         // Atualize o estado com os planos carregados
         setState(() {
-          _ongoingPlans =
-              data['ongoingPlans'];
-          _pastPlans =
-          data['pastPlans'];
+          _ongoingPlans = data['ongoingPlans'];
+          _pastPlans = data['pastPlans'];
         });
       } else {
         print("Arquivo não encontrado.");
@@ -118,28 +121,26 @@ class _TripPlansPage extends State<TripPlansListPage>
                       fontSize: 16,
                     ),
                     tabs: const [
-                      Tab(text: 'Ongoing Plans'),
-                      Tab(text: 'Past Plans'),
+                      Tab(text: 'Planos Futuros'),
+                      Tab(text: 'Planos Realizados'),
                     ],
                   ),
                 ),
-
               ],
             ),
           ),
         ),
         Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _ongoingPlans.isNotEmpty ? OngoingPlans() : noPlans(),
-                  PastPlans(),
-                ],
-              ),
-            )
-        ),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              _ongoingPlans.isNotEmpty ? OngoingPlans() : noPlans(),
+              PastPlans(),
+            ],
+          ),
+        )),
       ],
     );
   }
@@ -205,106 +206,117 @@ class _TripPlansPage extends State<TripPlansListPage>
     return Center(
       child: _ongoingPlans != null && _ongoingPlans.isNotEmpty
           ? Container(
-        height: 500,
-        child: ListView.builder(
-          itemCount: _ongoingPlans.length,
-          itemBuilder: (context, index) {
-            var activity = _ongoingPlans[index];
-            print(activity);
-            String title = activity['title'];
-            String description = activity['description'];
-            String cost = activity['cost'];
-            //String imagePath = activity['images'] ?? ''; // Verifique se 'images' é nulo
+              height: 500,
+              child: ListView.builder(
+                itemCount: _ongoingPlans.length,
+                itemBuilder: (context, index) {
+                  var activity = _ongoingPlans[index];
+                  print(activity);
+                  String title = activity['title'];
+                  String description = activity['description'];
+                  String cost = activity['cost'];
 
-            return Card(
-              margin: EdgeInsets.all(5),
-              child: ListTile(
-                title: Text(title),
-                subtitle: Text(
-                  description,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: Column(
-                  children: [
-                    Container(
-                      width: 20,
-                      height: 20,
-                      color: Colors.yellow,
+                  return GestureDetector(
+                    onTap: (){
+                      print('Detect');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TripPlanPage(
+                                  isLightTheme: widget.isLightTheme,
+                                  toggleTheme: widget.toggleTheme, plan: activity)));
+                    },
+                    child: Card(
+                      color: Theme.of(context).appBarTheme.backgroundColor,
+                      margin: EdgeInsets.all(5),
+                      child: ListTile(
+                        title: Text(title),
+                        subtitle: Text(
+                          description,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: Column(
+                          children: [
+                            SizedBox(height: 5),
+                            Icon(Icons.arrow_circle_right_outlined,
+                                size: 30,
+                                color: Theme.of(context).iconTheme.color),
+                            SizedBox(height: 5),
+                            Text(currencyFormatter
+                                .format(double.parse(cost))),
+                          ],
+                        ),
+                        leading: Container(
+                          width: 90, // Largura da imagem
+                          height: 120, // Altura da imagem
+                          decoration: BoxDecoration(
+                              borderRadius:
+                              BorderRadius.circular(8), // Bordas arredondadas
+                              image: DecorationImage(
+                                fit: BoxFit
+                                    .cover, // Ajusta a imagem para cobrir o espaço disponível
+                                image: AssetImage(activity['imgPath']),
+                              )),
+                        ),
+                      ),
                     ),
-                    SizedBox(height: 20),
-                    Text(cost),
-                  ],
-                ),
-                leading: Container(
-                  width: 90, // Largura da imagem
-                  height: 90, // Altura da imagem
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8), // Bordas arredondadas
-                    // image: imagePath.isNotEmpty
-                    //     ? DecorationImage(
-                    //   fit: BoxFit.cover, // Ajusta a imagem para cobrir o espaço disponível
-                    //   image: AssetImage(imagePath),
-                    // )
-                    //     : null, // Evitar erro se 'images' for nulo
-                  ),
-                ),
+                  );
+                },
               ),
-            );
-          },
-        ),
-      )
+            )
           : Text('Nenhum plano em andamento encontrado.'),
     );
   }
 
-
   Widget PastPlans() {
-    return _pastPlans.isEmpty?
-    Text('Load Past Plasns or You not have old plans')
+    return _pastPlans.isEmpty
+        ? Text('Load Past Plasns or You not have old plans')
         : Center(
-      child: Container(
-        color: Theme.of(context).colorScheme.secondary,
-        height: 500,
-        child: ListView.builder(
-          itemCount: _pastPlans.length,
-          itemBuilder: (context, index) {
-            var activity = _pastPlans[index];
-            return Card(
-              margin: EdgeInsets.all(5),
-              child: ListTile(
-                title: Text(activity['name']),
-                subtitle: Text(activity['description'],
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: Column(
-                  children: [
-                    Container(
-                      width: 20,
-                      height: 20,
-                      color: Colors.yellow,
+            child: Container(
+            color: Theme.of(context).colorScheme.secondary,
+            height: 500,
+            child: ListView.builder(
+              itemCount: _pastPlans.length,
+              itemBuilder: (context, index) {
+                var activity = _pastPlans[index];
+                return Card(
+                  margin: EdgeInsets.all(5),
+                  child: ListTile(
+                    title: Text(activity['name']),
+                    subtitle: Text(
+                      activity['description'],
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 20),
-                    Text('R\$ ${activity['cost'].toStringAsFixed(2)}'),
-                  ],
-                ),
-                leading: Container(
-                  width: 90, // Largura da imagem
-                  height: 90, // Altura da imagem
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8), // Bordas arredondadas
-                    image: DecorationImage(
-                      fit: BoxFit.cover, // Ajusta a imagem para cobrir o espaço disponível
-                      image: AssetImage(activity['images']),
+                    trailing: Column(
+                      children: [
+                        Container(
+                          width: 20,
+                          height: 20,
+                          color: Colors.yellow,
+                        ),
+                        SizedBox(height: 20),
+                        Text('R\$ ${activity['cost'].toStringAsFixed(2)}'),
+                      ],
+                    ),
+                    leading: Container(
+                      width: 90, // Largura da imagem
+                      height: 90, // Altura da imagem
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(8), // Bordas arredondadas
+                        image: DecorationImage(
+                          fit: BoxFit
+                              .cover, // Ajusta a imagem para cobrir o espaço disponível
+                          image: AssetImage(activity['images']),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            );
-          },
-        ),
-      )
-    );
+                );
+              },
+            ),
+          ));
   }
 }
