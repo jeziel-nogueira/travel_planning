@@ -23,43 +23,26 @@ class TripPlansListPage extends StatefulWidget {
 }
 
 class _TripPlansPage extends State<TripPlansListPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, RouteAware {
   late TabController _tabController;
 
   final NumberFormat currencyFormatter =
   NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
+  final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
   List _ongoingPlans = [];
   List _pastPlans = [];
 
-  Future<void> readJson() async {
-    final String response =
-        await rootBundle.loadString('assets/travel_plans.json');
-    final data = await json.decode(response);
-    setState(() {
-      print(data);
-      _ongoingPlans = data['ongoingPlans'];
-      _pastPlans = data['pastPlans'];
-      print(_ongoingPlans);
-      print(_pastPlans);
-    });
-  }
-
   Future<void> readSavedPlans() async {
     try {
-      // Obtenha o diretório do sistema de arquivos onde o plano foi salvo
       final directory = await getApplicationDocumentsDirectory();
       final file = File('${directory.path}/travel_plans.json');
 
-      // Verifique se o arquivo existe
       if (await file.exists()) {
-        // Leia o conteúdo do arquivo
         final contents = await file.readAsString();
 
-        // Converta o conteúdo JSON para um objeto do Dart
         final data = json.decode(contents);
 
-        // Atualize o estado com os planos carregados
         setState(() {
           _ongoingPlans = data['ongoingPlans'];
           _pastPlans = data['pastPlans'];
@@ -81,9 +64,20 @@ class _TripPlansPage extends State<TripPlansListPage>
 
   @override
   void dispose() {
+    routeObserver.unsubscribe(this);
+
     _tabController.dispose();
     super.dispose();
   }
+
+
+
+  @override
+  void didPopNext() {
+    print("Atualizando planos ao retornar para a página...");
+    readSavedPlans(); // Atualiza a lista de planos
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +100,7 @@ class _TripPlansPage extends State<TripPlansListPage>
                     controller: _tabController,
                     dividerColor: Colors.transparent,
                     indicator: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
                         color: Theme.of(context).iconTheme.color),
                     labelColor:
                         Theme.of(context).appBarTheme.titleTextStyle?.color ??
@@ -150,7 +144,7 @@ class _TripPlansPage extends State<TripPlansListPage>
       child: Center(
           child: Column(
         children: [
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             'Sua lista de planos esta vazia',
             style: GoogleFonts.robotoCondensed(
@@ -160,7 +154,7 @@ class _TripPlansPage extends State<TripPlansListPage>
                   Colors.black,
             ),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Container(
             child: Text(
               'Vamos criar um plano?',
@@ -228,7 +222,7 @@ class _TripPlansPage extends State<TripPlansListPage>
                     },
                     child: Card(
                       color: Theme.of(context).appBarTheme.backgroundColor,
-                      margin: EdgeInsets.all(5),
+                      margin: const EdgeInsets.all(5),
                       child: ListTile(
                         title: Text(title),
                         subtitle: Text(
@@ -238,11 +232,11 @@ class _TripPlansPage extends State<TripPlansListPage>
                         ),
                         trailing: Column(
                           children: [
-                            SizedBox(height: 5),
+                            const SizedBox(height: 5),
                             Icon(Icons.arrow_circle_right_outlined,
                                 size: 30,
                                 color: Theme.of(context).iconTheme.color),
-                            SizedBox(height: 5),
+                            const SizedBox(height: 5),
                             Text(currencyFormatter
                                 .format(double.parse(cost))),
                           ],
@@ -265,13 +259,13 @@ class _TripPlansPage extends State<TripPlansListPage>
                 },
               ),
             )
-          : Text('Nenhum plano em andamento encontrado.'),
+          : const Text('Nenhum plano em andamento encontrado.'),
     );
   }
 
   Widget PastPlans() {
     return _pastPlans.isEmpty
-        ? Text('Load Past Plasns or You not have old plans')
+        ? const Text('Load Past Plasns or You not have old plans')
         : Center(
             child: Container(
             color: Theme.of(context).colorScheme.secondary,
@@ -281,7 +275,7 @@ class _TripPlansPage extends State<TripPlansListPage>
               itemBuilder: (context, index) {
                 var activity = _pastPlans[index];
                 return Card(
-                  margin: EdgeInsets.all(5),
+                  margin: const EdgeInsets.all(5),
                   child: ListTile(
                     title: Text(activity['name']),
                     subtitle: Text(
@@ -296,7 +290,7 @@ class _TripPlansPage extends State<TripPlansListPage>
                           height: 20,
                           color: Colors.yellow,
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Text('R\$ ${activity['cost'].toStringAsFixed(2)}'),
                       ],
                     ),

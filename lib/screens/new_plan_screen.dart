@@ -35,11 +35,8 @@ class _NewPlanScreen extends State<NewPlanScreen> {
       NumberFormat.currency(locale: 'pt_BR', symbol: 'R\$');
   ScrollController _controller = ScrollController();
 
-  // int dia = data.day;
-  // int mes = data.month;
-  // int ano = data.year;
-  // String nomeDoMes = DateFormat.MMMM('pt_BR').format(data);
-  // print("Mês (nome): $nomeDoMes");
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   List _items = [];
   List _ongoingPlans = [];
@@ -61,16 +58,20 @@ class _NewPlanScreen extends State<NewPlanScreen> {
     readPlans();
   }
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
   Future<void> _navigateToPlaceScreen(Map<String, dynamic> place) async {
-    // Navega para a página de detalhes e aguarda o retorno de um resultado
     final selectedPlace = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => PlaceScreen(place: place),
       ),
     );
-
-    // Atualiza o estado se um local foi selecionado
     if (selectedPlace != null) {
       setState(() {
         _selectedPlaceData = selectedPlace;
@@ -88,7 +89,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           controller: _controller,
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
               Container(
@@ -97,7 +98,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Container(
                         width: MediaQuery.of(context).size.width * 0.55,
                         height: MediaQuery.of(context).size.height * 0.15,
@@ -112,7 +113,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 18),
+                      const SizedBox(height: 18),
                       Text(
                         'Novo plano de viagem',
                         style: GoogleFonts.robotoCondensed(
@@ -137,7 +138,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                               Colors.black,
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
@@ -155,6 +156,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                     ),
                   ),
                   TextFormField(
+                    controller: _nameController,
                     cursorColor:
                         Theme.of(context).appBarTheme.titleTextStyle?.color ??
                             Colors.black,
@@ -165,9 +167,11 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                     ),
                   ),
                   TextFormField(
+                    controller: _descriptionController,
                     cursorColor:
                         Theme.of(context).appBarTheme.titleTextStyle?.color ??
                             Colors.black,
+
                     maxLength: 50,
                     decoration: const InputDecoration(
                       hintText: 'Adcione uma descrição',
@@ -182,7 +186,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           Text(
                             'Escolha a data',
                             style: GoogleFonts.robotoCondensed(
@@ -190,7 +194,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                               fontSize: 18,
                             ),
                           ),
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           FloatingActionButton(
                             onPressed: () {
                               showCustomDateRangePicker(
@@ -209,7 +213,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                                     endDate = end;
                                     startDate = start;
                                     Timer(
-                                        Duration(milliseconds: 300),
+                                        const Duration(milliseconds: 300),
                                         () => _controller.jumpTo(_controller
                                             .position.maxScrollExtent));
                                   });
@@ -232,7 +236,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                               color: Colors.white,
                             ),
                           ),
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -250,7 +254,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                                         Colors.black,
                                   ),
                                 ),
-                                SizedBox(width: 20),
+                                const SizedBox(width: 20),
                                 Text(
                                   'Fim: ${endDate == null ? '--/--' : DateFormat('yyyy-MM-dd').format(endDate!)}',
                                   style: GoogleFonts.robotoCondensed(
@@ -272,7 +276,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 18),
+              const SizedBox(height: 18),
               _selectedCountry == null
                   ? Text(
                       'Já podemos escolher o destino?',
@@ -286,7 +290,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                             Colors.black,
                       ),
                     )
-                  : SizedBox(height: 10),
+                  : const SizedBox(height: 10),
               _items.isNotEmpty
                   ? DropdownButton<String>(
                       value: _selectedCountry,
@@ -357,7 +361,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                               orElse: () => null);
 
                           Timer(
-                              Duration(milliseconds: 300),
+                              const Duration(milliseconds: 300),
                               () => _controller.jumpTo(
                                   _controller.position.maxScrollExtent));
                           if (_selectedCountry != newValue) {
@@ -393,7 +397,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           Container(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -408,55 +412,11 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                         ],
                       ),
                     )
-                  : Text('data'),
+                  : const Text('data'),
               const SizedBox(height: 12),
-              // Center(
-              //   child: _selectedPlaceData != null
-              //       ? Container(
-              //     height: 500,
-              //     child: ListView.builder(
-              //       itemCount: _selectedPlaceData?['activities'].length,
-              //       itemBuilder: (context, index) {
-              //         var activity = _selectedPlaceData?['activities'][index];
-              //         return Card(
-              //           margin: EdgeInsets.all(5),
-              //           child: ListTile(
-              //             title: Text(activity['name']),
-              //             subtitle: Text(activity['description'],
-              //               maxLines: 2,
-              //               overflow: TextOverflow.ellipsis,
-              //             ),
-              //             trailing: Column(
-              //               children: [
-              //                 Container(
-              //                   width: 20,
-              //                   height: 20,
-              //                   color: Colors.yellow,
-              //                 ),
-              //                 SizedBox(height: 20),
-              //                 Text('R\$ ${activity['cost'].toStringAsFixed(2)}'),
-              //               ],
-              //             ),
-              //             leading: Container(
-              //               width: 90, // Largura da imagem
-              //               height: 90, // Altura da imagem
-              //               decoration: BoxDecoration(
-              //                 borderRadius: BorderRadius.circular(8), // Bordas arredondadas
-              //                 image: DecorationImage(
-              //                   fit: BoxFit.cover, // Ajusta a imagem para cobrir o espaço disponível
-              //                   image: AssetImage(activity['images']),
-              //                 ),
-              //               ),
-              //             ),
-              //           ),
-              //         );
-              //       },
-              //     ),
-              //   ): Text(''),
-              // ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   children: List.generate(_activitiesListContent.length,
                       (index) => _activitiesListContent[index]),
@@ -471,7 +431,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                               onTap: () {
                                 addNewActivity();
                                 Timer(
-                                    Duration(milliseconds: 300),
+                                    const Duration(milliseconds: 300),
                                     () => _controller.jumpTo(
                                         _controller.position.maxScrollExtent));
                               },
@@ -482,7 +442,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                                   color: Colors.black26,
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.all(4),
+                                  padding: const EdgeInsets.all(4),
                                   child: Row(
                                     children: [
                                       Icon(
@@ -490,7 +450,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                                         color:
                                             Theme.of(context).iconTheme.color,
                                       ),
-                                      SizedBox(width: 5),
+                                      const SizedBox(width: 5),
                                       Text(
                                         'Adicionar nova atividade',
                                         style: GoogleFonts.getFont(
@@ -505,9 +465,9 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                               ),
                             ),
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Padding(
-                            padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                            padding: const EdgeInsets.fromLTRB(0, 4, 0, 4),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -537,7 +497,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                           ),
                         ],
                       )
-                    : SizedBox(height: 20),
+                    : const SizedBox(height: 20),
               ),
             ],
           ),
@@ -548,15 +508,24 @@ class _NewPlanScreen extends State<NewPlanScreen> {
             if(index == 0){
               Navigator.pop(context);
             }else{
-              savePlan(generatePlan());
-              Timer(
-                  Duration(milliseconds: 500),
-                      () => {Navigator.pop(context)});
+              String name = _nameController.text;
+              String desc = _descriptionController.text;
+
+              if(startDate != null &&
+                  name.isNotEmpty &&
+                  desc.isNotEmpty &&
+                _selectedCountry != null
+                ){
+                final bool save = await savePlan(generatePlan());
+                Timer(
+                    const Duration(milliseconds: 500),
+                        () {Navigator.pop(context, save);});
+              }
+
             }
           },
-          //fixedColor: Colors.cyan,
+          fixedColor: Colors.cyan,
           currentIndex: 0,
-          //unselectedItemColor: Colors.black38,
           items: [
             BottomNavigationBarItem(
                 icon: Icon(Icons.arrow_circle_left_outlined,
@@ -580,6 +549,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
     _activitiesList.add(activityEmpty(_activitiesList.length));
     setState(() {
       _activitiesListContent = _activitiesList;
+      print(_activitiesList);
     });
   }
 
@@ -602,10 +572,10 @@ class _NewPlanScreen extends State<NewPlanScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     color: Colors.blue.shade50,
-                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
                   ),
                   child: GestureDetector(
                     onTap: () async {
@@ -634,7 +604,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                       ],
                     ),
                   ),
@@ -647,10 +617,10 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                     });
                   },
                   child: Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
                       color: Colors.blue.shade50,
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
                     ),
                     child: Icon(Icons.delete,
                         color: Theme.of(context).iconTheme.color),
@@ -666,7 +636,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
 
   Widget setActivity(int index, Map<String, dynamic> activity) {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: Row(
         children: [
           Container(
@@ -684,7 +654,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
               ),
             ),
           ),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           Container(
             width: MediaQuery.of(context).size.width * 0.45,
             height: MediaQuery.of(context).size.height * 0.12,
@@ -699,11 +669,11 @@ class _NewPlanScreen extends State<NewPlanScreen> {
             child: Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   child: Text(activity['name']),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
                   child: Text(
                     activity['description'],
                     maxLines: 2,
@@ -720,20 +690,19 @@ class _NewPlanScreen extends State<NewPlanScreen> {
 
   Future<void> _navigateToActivityScreen(
       Map<String, dynamic> place, int index) async {
-    // Navega para a página de detalhes e aguarda o retorno de um resultado
     final activity = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => ActivityDetails(place: place),
       ),
     );
-
-    // Atualiza o estado se um local foi selecionado
     if (activity != null) {
       setState(() {
         _activitiesList[index] = setActivity(index, activity);
         budget = budget + (activity['cost']);
-        _selectedActivities.add(activity['name']);
+        String act = activity.toString();
+        _selectedActivities.add(act);
+        print(_selectedActivities);
       });
     }
   }
@@ -751,8 +720,8 @@ class _NewPlanScreen extends State<NewPlanScreen> {
   TravelPlan generatePlan() {
     return TravelPlan(
       state: 'ongoing',
-      title: "Viagem para a Praia",
-      description: "Um plano de viagem incrível para a praia.",
+      title: _nameController.text,
+      description: _descriptionController.text,
       destiny: _selectedCountry!,
       cost: budget.toString(),
       endDate: endDate.toString(),
@@ -763,7 +732,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
     );
   }
 
-  Future<void> savePlan(TravelPlan plan) async {
+  Future<bool> savePlan(TravelPlan plan) async {
     final directory = await getApplicationDocumentsDirectory();
     final file = File('${directory.path}/travel_plans.json');
 
@@ -787,6 +756,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
         jsonData['ongoingPlans'][i] = plan.toJson();
         print('PLANO ATUALIZADO:');
         planExists = true;
+        await file.writeAsString(json.encode(jsonData));
         break;
       }
     }
@@ -801,6 +771,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
 
     // Salva o JSON atualizado de volta no arquivo
     await file.writeAsString(json.encode(jsonData));
+    return true;
   }
 }
 

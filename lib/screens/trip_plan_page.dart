@@ -1,7 +1,13 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'new_plan_screen.dart';
 
 class TripPlanPage extends StatefulWidget {
   final Map<String, dynamic> plan;
@@ -28,6 +34,8 @@ class _TripPlan extends State<TripPlanPage> {
   List<Widget> _activitiesList = [];
   List<bool> _isCheckedList = [];
   List<Widget> _activitiesListContent = [];
+  bool? planState;
+  int isUpdate = 0;
 
 
 
@@ -37,6 +45,7 @@ class _TripPlan extends State<TripPlanPage> {
     _isCheckedList.add(false); // Inicializa o estado do Checkbox como desmarcado
     _activitiesList.add(_activity(_activitiesList.length)); // Passa o índice da atividade
     setState(() {
+
       _activitiesListContent = _activitiesList;
     });
   }
@@ -124,7 +133,11 @@ class _TripPlan extends State<TripPlanPage> {
   @override
   void initState(){
     super.initState();
+    print(widget.plan);
     _budget = double.parse(widget.plan['cost']);
+    widget.plan['statte'] == 'ongoing'?
+        planState = true
+        : planState = false;
   }
 
 
@@ -132,7 +145,6 @@ class _TripPlan extends State<TripPlanPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(10),
@@ -270,7 +282,7 @@ class _TripPlan extends State<TripPlanPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'Your travel plan',
+                        widget.plan['title'],
                         style: GoogleFonts.getFont('Roboto Condensed',
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
@@ -278,7 +290,15 @@ class _TripPlan extends State<TripPlanPage> {
                       ),
                       GestureDetector(
                         onTap: (){
-                          addNewActivity();
+                          setState(() {
+
+                            if(widget.plan['state'] == 'ongoing'){
+                              widget.plan['state'] = 'past';
+                            }else{
+                              widget.plan['state'] = 'ongoing';
+                            }
+                            planState = !planState!;
+                          });
                         },
                         child: Container(
                           decoration: const BoxDecoration(
@@ -294,8 +314,15 @@ class _TripPlan extends State<TripPlanPage> {
                                   color: Colors.white,
                                 ),
                                 const SizedBox(width: 5),
+                                planState != true?
                                 Text(
-                                  'Add new activity',
+                                  'Marcar como Cuncluido',
+                                  style: GoogleFonts.getFont('Roboto Condensed',
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14,
+                                      color: Colors.white),
+                                ):Text(
+                                  'Marcar como Não Cuncluido',
                                   style: GoogleFonts.getFont('Roboto Condensed',
                                       fontWeight: FontWeight.w700,
                                       fontSize: 14,
@@ -322,6 +349,7 @@ class _TripPlan extends State<TripPlanPage> {
           ),
         ),
         bottomNavigationBar: Container(
+          color: Theme.of(context).appBarTheme.backgroundColor,
           height: 80,
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Row(
@@ -357,6 +385,7 @@ class _TripPlan extends State<TripPlanPage> {
               GestureDetector(
                 onTap: (){
                   print('book now');
+                  savePlan(generatePlan());
                 },
                 child: Container(
                   height: 60,
@@ -382,4 +411,55 @@ class _TripPlan extends State<TripPlanPage> {
       ),
     );
   }
+
+  TravelPlan generatePlan() {
+    List<String> selectedActivities = List<String>.from(widget.plan['selectedActivities'].values);
+
+    return TravelPlan(
+        state: widget.plan['state'],
+        title: widget.plan['title'],
+        description: widget.plan['description'],
+        destiny: widget.plan['destiny'],
+        cost: widget.plan['cost'],
+        endDate: widget.plan['endDate'],
+        startDate: widget.plan['startDate'],
+        destinyID: widget.plan['destinyID'],
+        selectedActivities: selectedActivities,
+        imgPath: widget.plan['imgPath'],
+    );
+  }
+
+  Future<void> savePlan(TravelPlan plan) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final file = File('${directory.path}/travel_plans.json');
+
+    // Carrega os dados existentes
+    Map<String, dynamic> jsonData = {
+      'plans_model': [],
+      'ongoingPlans': [],
+      'pastPlans': [],
+    };
+
+    if (await file.exists()) {
+      final contents = await file.readAsString();
+      jsonData = json.decode(contents);
+    }
+
+    // Remove o plano de ongoingPlans ou pastPlans se já existir
+    jsonData['ongoingPlans'] = jsonData['ongoingPlans'].where((p) => p['title'] != plan.title).toList();
+    jsonData['pastPlans'] = jsonData['pastPlans'].where((p) => p['title'] != plan.title).toList();
+
+    if (plan.state == 'ongoing') {
+      print('Adicionando plano em ongoingPlans');
+      jsonData['ongoingPlans'].add(plan.toJson());
+    } else if (plan.state == 'past') {
+      print('Adicionando plano em pastPlans');
+      jsonData['pastPlans'].add(plan.toJson());
+    }
+
+    // Salva o JSON atualizado de volta no arquivo
+    await file.writeAsString(json.encode(jsonData));
+  }
+
+
 }
