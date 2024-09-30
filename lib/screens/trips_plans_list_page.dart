@@ -195,8 +195,6 @@ class _TripPlansPage extends State<TripPlansListPage>
   }
 
   Widget OngoingPlans() {
-    print('_items');
-    print(_ongoingPlans);
     return Center(
       child: _ongoingPlans != null && _ongoingPlans.isNotEmpty
           ? Container(

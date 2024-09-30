@@ -700,8 +700,12 @@ class _NewPlanScreen extends State<NewPlanScreen> {
       setState(() {
         _activitiesList[index] = setActivity(index, activity);
         budget = budget + (activity['cost']);
-        String act = activity.toString();
-        _selectedActivities.add(act);
+
+        // Convertendo a atividade para JSON e adicionando à lista _selectedActivities
+        activity['state'] = 'ongoing';
+        String actJson = jsonEncode(activity);
+        _selectedActivities.add(actJson);
+
         print(_selectedActivities);
       });
     }
@@ -812,9 +816,10 @@ class TravelPlan {
       'destinyID': destinyID,
       'imgPath': imgPath,
       // Converte selectedActivities em um Map de chave-valor
-      'selectedActivities': {
-        for (var activity in selectedActivities) activity: 'ongoing'
-      },
+      // 'selectedActivities': {
+      //   for (var activity in selectedActivities) activity: 'ongoing'
+      // },
+      'selectedActivities': jsonEncode(selectedActivities),
     };
   }
 }

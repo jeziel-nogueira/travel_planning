@@ -31,104 +31,11 @@ class _TripPlan extends State<TripPlanPage> {
   double? _budget;
   final NumberFormat currencyFormatter = NumberFormat.currency(locale: 'pt_BR', symbol: '\$');
 
-  List<Widget> _activitiesList = [];
-  List<bool> _isCheckedList = [];
   List<Widget> _activitiesListContent = [];
   bool? planState;
   int isUpdate = 0;
+  List<dynamic> _selectedActivities = [];
 
-
-
-
-
-  void addNewActivity() {
-    _isCheckedList.add(false); // Inicializa o estado do Checkbox como desmarcado
-    _activitiesList.add(_activity(_activitiesList.length)); // Passa o índice da atividade
-    setState(() {
-
-      _activitiesListContent = _activitiesList;
-    });
-  }
-
-  void changeActivity(int index, bool state){
-    setState(() {
-      print(state);
-      _isCheckedList[index] = state;
-      _activitiesListContent = _activitiesList;
-    });
-  }
-
-  Widget _activity(int index) {
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: MediaQuery.of(context).size.width * 0.15,
-            height: 90,
-            margin: const EdgeInsets.symmetric(vertical: 10), // Espaçamento entre as atividades
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: Colors.blue.shade50,
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.zero, bottomLeft: Radius.circular(15), bottomRight: Radius.zero),
-            ),
-            child: Center(
-              child: Checkbox(
-                value: _isCheckedList[index],
-                onChanged: (bool? value) {
-                  changeActivity(index, !_isCheckedList[index]);
-                  setState(() {
-                  });
-                },
-                activeColor: Colors.blue,
-              ),
-            ),
-          ),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.7,
-            height: 90,
-            margin: const EdgeInsets.symmetric(vertical: 10), // Espaçamento entre as atividades
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: Colors.blue.shade50,
-              borderRadius: const BorderRadius.only(topLeft: Radius.zero, topRight: Radius.circular(15), bottomLeft: Radius.zero, bottomRight: Radius.circular(15)),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Aspen,',
-                  style: GoogleFonts.getFont('Roboto Condensed',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                      color: Colors.black),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  'March 09, 2024,',
-                  style: GoogleFonts.getFont('Roboto Condensed',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                      color: Colors.black),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text('Cost: \$${currencyFormatter.format(_budget)} '),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-
-  List<Widget> loadActivities(){
-    return _activitiesList;
-  }
 
   @override
   void initState(){
@@ -138,8 +45,76 @@ class _TripPlan extends State<TripPlanPage> {
     widget.plan['statte'] == 'ongoing'?
         planState = true
         : planState = false;
+
+    _selectedActivities = json.decode(widget.plan['selectedActivities']);
+    manipulateActivities(_selectedActivities);
   }
 
+  void manipulateActivities(List<dynamic> selectedActivities) {
+    setState(() {
+      // Certifique-se de que _selectedActivities tenha o mesmo tamanho que selectedActivities
+      if (_selectedActivities.isEmpty) {
+        _selectedActivities = List<String>.from(selectedActivities);
+      }
+
+      // Limpar _activitiesListContent antes de reconstruí-lo
+      _activitiesListContent.clear();
+
+      for (var i = 0; i < selectedActivities.length; i++) {
+        // Decodifica a string JSON para um mapa
+        Map<String, dynamic> activity = jsonDecode(selectedActivities[i]);
+
+        // Cria um widget (ex: um Card ou ListTile) para a atividade
+        Widget activityWidget = Card(
+          child: ListTile(
+            leading: Image.asset(activity['images']), // Exibe o thumbnail da atividade
+            title: Text(activity['name']),
+            subtitle: Text(activity['description']),
+            trailing: Column(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      // Alterna o estado da atividade
+                      if (activity['state'] == 'ongoing') {
+                        activity['state'] = 'past';
+                      } else {
+                        activity['state'] = 'ongoing';
+                      }
+
+                      // Atualizando a lista original _selectedActivities, se ela tiver elementos suficientes
+                      if (i < _selectedActivities.length) {
+                        String updatedActivityJson = jsonEncode(activity);
+                        _selectedActivities[i] = updatedActivityJson;
+
+                        // Opcional: exibir a lista atualizada
+                        print(_selectedActivities);
+                        manipulateActivities(_selectedActivities);
+                      } else {
+                        print("Erro: Índice fora do intervalo de _selectedActivities.");
+                      }
+                    });
+                  },
+                  child: Container(
+                    child: Column(
+                      children: [
+                        Icon(Icons.add),
+                        Text(activity['state'] == 'ongoing' ? 'Pendente' : 'Concluido'),
+                      ],
+                    ),
+                  ),
+                ),
+                Text('Custo: \$${activity['cost']}')
+              ],
+            ),
+          ),
+        );
+
+        // Adiciona o widget atualizado à lista
+        _activitiesListContent.add(activityWidget);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
