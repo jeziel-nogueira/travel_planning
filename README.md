@@ -60,7 +60,9 @@ O **Travel Planner** é um aplicativo simples para planejar viagens, permitindo 
    $ flutter run
 
 ## Cpturas de Tela
+![Screenshot_20240925_120317](https://github.com/user-attachments/assets/847d01a3-1c6d-4bb4-a9f3-2a98c705878f)
 ![Screenshot_20240925_120138](https://github.com/user-attachments/assets/aa68ce1c-2733-4459-8fbb-4b271b7a8fa8)
 ![Screenshot_20240925_120226](https://github.com/user-attachments/assets/29e75ec9-c27f-473b-a375-408f490ca0c0)
-![Screenshot_20240925_120424](https://github.com/user-attachments/assets/60ee93c0-516b-4269-b189-7218b9fb3aed)
-![Screenshot_20240925_120317](https://github.com/user-attachments/assets/847d01a3-1c6d-4bb4-a9f3-2a98c705878f)
+![Screenshot_20240926_014410](https://github.com/user-attachments/assets/42b734e0-4ead-4f81-9d1a-d9b9399b3570)
+![Screenshot_20240926_014434](https://github.com/user-attachments/assets/4e7c0f3e-dd7e-4909-a7bc-fcfe68b20f85)
+![Screenshot_20241001_114341](https://github.com/user-attachments/assets/6ca4b525-9d67-4bda-acb3-d6841564a3e0)
