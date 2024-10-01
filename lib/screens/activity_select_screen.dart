@@ -253,6 +253,8 @@ class _ActivityDetails extends State<ActivityDetails> {
                         //selectActivity(activity, index); // Seleciona a atividade
                       },
                       child: Checkbox(
+                        checkColor: Colors.white,
+                        activeColor: Colors.green,
                         value: _isSelected,
                         onChanged: (bool? value) {
                           setState(() {

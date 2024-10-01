@@ -172,13 +172,17 @@ class _TripPlansPage extends State<TripPlansListPage>
               backgroundColor:
                   Theme.of(context).iconTheme.color, // background color
             ),
-            onPressed: () {
+            onPressed: () async {
+              final result = await
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => NewPlanScreen(
                           isLightTheme: widget.isLightTheme,
                           toggleTheme: widget.toggleTheme)));
+              if(result){
+                readSavedPlans();
+              }
             },
             child: Text(
               'Novo Plano',
@@ -209,14 +213,22 @@ class _TripPlansPage extends State<TripPlansListPage>
                   String cost = activity['cost'];
 
                   return GestureDetector(
-                    onTap: (){
+                    onTap: () async {
                       print('Detect');
+                      final result = await
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => TripPlanPage(
                                   isLightTheme: widget.isLightTheme,
                                   toggleTheme: widget.toggleTheme, plan: activity)));
+                      setState(() {
+                        if (result != null) {
+                          readSavedPlans();
+                        }else{
+                          readSavedPlans();
+                        }
+                      });
                     },
                     child: Card(
                       color: Theme.of(context).appBarTheme.backgroundColor,
@@ -266,43 +278,66 @@ class _TripPlansPage extends State<TripPlansListPage>
         ? const Text('Load Past Plasns or You not have old plans')
         : Center(
             child: Container(
-            color: Theme.of(context).colorScheme.secondary,
+            //color: Theme.of(context).colorScheme.secondary,
             height: 500,
             child: ListView.builder(
               itemCount: _pastPlans.length,
               itemBuilder: (context, index) {
                 var activity = _pastPlans[index];
-                return Card(
-                  margin: const EdgeInsets.all(5),
-                  child: ListTile(
-                    title: Text(activity['name']),
-                    subtitle: Text(
-                      activity['description'],
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    trailing: Column(
-                      children: [
-                        Container(
-                          width: 20,
-                          height: 20,
-                          color: Colors.yellow,
-                        ),
-                        const SizedBox(height: 20),
-                        Text('R\$ ${activity['cost'].toStringAsFixed(2)}'),
-                      ],
-                    ),
-                    leading: Container(
-                      width: 90, // Largura da imagem
-                      height: 90, // Altura da imagem
-                      decoration: BoxDecoration(
-                        borderRadius:
+                String title = activity['title'];
+                String description = activity['description'];
+                String cost = activity['cost'];
+
+                return GestureDetector(
+                  onTap: () async {
+                    print('Detect');
+                    final result = await
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TripPlanPage(
+                                isLightTheme: widget.isLightTheme,
+                                toggleTheme: widget.toggleTheme, plan: activity)));
+                    setState(() {
+                      if (result != null) {
+                        readSavedPlans();
+                      }else{
+                        readSavedPlans();
+                      }
+                    });
+                  },
+                  child: Card(
+                    color: Theme.of(context).appBarTheme.backgroundColor,
+                    margin: const EdgeInsets.all(5),
+                    child: ListTile(
+                      title: Text(title),
+                      subtitle: Text(
+                        description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      trailing: Column(
+                        children: [
+                          const SizedBox(height: 5),
+                          Icon(Icons.arrow_circle_right_outlined,
+                              size: 30,
+                              color: Theme.of(context).iconTheme.color),
+                          const SizedBox(height: 5),
+                          Text(currencyFormatter
+                              .format(double.parse(cost))),
+                        ],
+                      ),
+                      leading: Container(
+                        width: 90, // Largura da imagem
+                        height: 120, // Altura da imagem
+                        decoration: BoxDecoration(
+                            borderRadius:
                             BorderRadius.circular(8), // Bordas arredondadas
-                        image: DecorationImage(
-                          fit: BoxFit
-                              .cover, // Ajusta a imagem para cobrir o espaço disponível
-                          image: AssetImage(activity['images']),
-                        ),
+                            image: DecorationImage(
+                              fit: BoxFit
+                                  .cover, // Ajusta a imagem para cobrir o espaço disponível
+                              image: AssetImage(activity['imgPath']),
+                            )),
                       ),
                     ),
                   ),

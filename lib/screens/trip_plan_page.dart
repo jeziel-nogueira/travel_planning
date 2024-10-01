@@ -42,7 +42,7 @@ class _TripPlan extends State<TripPlanPage> {
     super.initState();
     print(widget.plan);
     _budget = double.parse(widget.plan['cost']);
-    widget.plan['statte'] == 'ongoing'?
+    widget.plan['state'] == 'past'?
         planState = true
         : planState = false;
 
@@ -66,6 +66,7 @@ class _TripPlan extends State<TripPlanPage> {
 
         // Cria um widget (ex: um Card ou ListTile) para a atividade
         Widget activityWidget = Card(
+          color: Color(0xFF96d7eb),
           child: ListTile(
             leading: Image.asset(activity['images']), // Exibe o thumbnail da atividade
             title: Text(activity['name']),
@@ -76,35 +77,45 @@ class _TripPlan extends State<TripPlanPage> {
                   onTap: () {
                     setState(() {
                       // Alterna o estado da atividade
-                      if (activity['state'] == 'ongoing') {
-                        activity['state'] = 'past';
-                      } else {
-                        activity['state'] = 'ongoing';
-                      }
 
-                      // Atualizando a lista original _selectedActivities, se ela tiver elementos suficientes
-                      if (i < _selectedActivities.length) {
-                        String updatedActivityJson = jsonEncode(activity);
-                        _selectedActivities[i] = updatedActivityJson;
-
-                        // Opcional: exibir a lista atualizada
-                        print(_selectedActivities);
-                        manipulateActivities(_selectedActivities);
-                      } else {
-                        print("Erro: Índice fora do intervalo de _selectedActivities.");
-                      }
                     });
                   },
                   child: Container(
                     child: Column(
                       children: [
-                        Icon(Icons.add),
-                        Text(activity['state'] == 'ongoing' ? 'Pendente' : 'Concluido'),
+                        Checkbox(
+                          checkColor: Colors.white,
+                          activeColor: Colors.green,
+                          value: activity['state'] == 'ongoing' ? false : true,
+                          onChanged: (bool? newValue) {
+                            setState(() {
+                              if (activity['state'] == 'ongoing') {
+                                activity['state'] = 'past';
+                              } else {
+                                activity['state'] = 'ongoing';
+                              }
+                              print(activity['state']);
+
+                              // Atualizando a lista original _selectedActivities, se ela tiver elementos suficientes
+                              if (i < _selectedActivities.length) {
+                                String updatedActivityJson = jsonEncode(activity);
+                                _selectedActivities[i] = updatedActivityJson;
+                                manipulateActivities(_selectedActivities);
+                              } else {
+                                print("Erro: Índice fora do intervalo de _selectedActivities.");
+                              }
+
+                              // Atualiza a lista _selectedActivities
+                              String updatedActivityJson = jsonEncode(activity);
+                              _selectedActivities[i] = updatedActivityJson;
+                            });
+                          },
+                        ),
+                        //Text(activity['state'] == 'ongoing' ? 'Pendente' : 'Concluido'),
                       ],
                     ),
                   ),
                 ),
-                Text('Custo: \$${activity['cost']}')
               ],
             ),
           ),
@@ -266,38 +277,44 @@ class _TripPlan extends State<TripPlanPage> {
                       GestureDetector(
                         onTap: (){
                           setState(() {
-
                             if(widget.plan['state'] == 'ongoing'){
                               widget.plan['state'] = 'past';
+                              planState = true;
                             }else{
                               widget.plan['state'] = 'ongoing';
+                              planState = false;
                             }
-                            planState = !planState!;
                           });
                         },
                         child: Container(
                           decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
-                            color: Colors.black26,
+                            color: Color(0xFF96d7eb),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(4),
                             child: Row(
                               children: [
-                                const Icon(
-                                  Icons.add_circle_outline,
-                                  color: Colors.white,
+                                Checkbox(
+                                  checkColor: Colors.white,
+                                  activeColor: Colors.green,
+                                  value: planState == false ? false:true,
+                                  onChanged: (bool? newValue) {
+
+                                  },
                                 ),
+
                                 const SizedBox(width: 5),
-                                planState != true?
+
+                                planState == true?
                                 Text(
-                                  'Marcar como Cuncluido',
+                                  ' Cuncluido ',
                                   style: GoogleFonts.getFont('Roboto Condensed',
                                       fontWeight: FontWeight.w700,
                                       fontSize: 14,
                                       color: Colors.white),
                                 ):Text(
-                                  'Marcar como Não Cuncluido',
+                                  ' Não Cuncluido ',
                                   style: GoogleFonts.getFont('Roboto Condensed',
                                       fontWeight: FontWeight.w700,
                                       fontSize: 14,
@@ -340,7 +357,7 @@ class _TripPlan extends State<TripPlanPage> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        'Budget',
+                        'Custo Estimado:',
                         style: GoogleFonts.getFont('Roboto Condensed',
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
@@ -359,7 +376,6 @@ class _TripPlan extends State<TripPlanPage> {
               ),
               GestureDetector(
                 onTap: (){
-                  print('book now');
                   savePlan(generatePlan());
                 },
                 child: Container(
@@ -371,7 +387,7 @@ class _TripPlan extends State<TripPlanPage> {
                       color: Colors.blue),
                   child: Center(
                     child: Text(
-                      'Arquivar',
+                      'Salvar',
                       style: GoogleFonts.getFont("Roboto Condensed",
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
@@ -388,7 +404,7 @@ class _TripPlan extends State<TripPlanPage> {
   }
 
   TravelPlan generatePlan() {
-    List<String> selectedActivities = List<String>.from(widget.plan['selectedActivities'].values);
+    List<String> selectedActivities = List<String>.from(_selectedActivities);
 
     return TravelPlan(
         state: widget.plan['state'],
@@ -399,7 +415,7 @@ class _TripPlan extends State<TripPlanPage> {
         endDate: widget.plan['endDate'],
         startDate: widget.plan['startDate'],
         destinyID: widget.plan['destinyID'],
-        selectedActivities: selectedActivities,
+        selectedActivities: selectedActivities ,
         imgPath: widget.plan['imgPath'],
     );
   }

@@ -403,9 +403,19 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(_selectedPlaceData!['name']),
+                                Text(_selectedPlaceData!['name'],
+                                style: TextStyle(color: Theme.of(context)
+                                    .appBarTheme
+                                    .titleTextStyle
+                                    ?.color ??
+                                    Colors.black,),),
                                 Text(currencyFormatter
-                                    .format(_selectedPlaceData!['cost']))
+                                    .format(_selectedPlaceData!['cost']),
+                                  style: TextStyle(color: Theme.of(context)
+                                      .appBarTheme
+                                      .titleTextStyle
+                                      ?.color ??
+                                      Colors.black,),)
                               ],
                             ),
                           ),
@@ -415,11 +425,13 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                   : const Text('data'),
               const SizedBox(height: 12),
               const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(10),
-                child: Column(
-                  children: List.generate(_activitiesListContent.length,
-                      (index) => _activitiesListContent[index]),
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    children: List.generate(_activitiesListContent.length,
+                            (index) => _activitiesListContent[index]),
+                  ),
                 ),
               ),
               Center(
@@ -436,6 +448,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                                         _controller.position.maxScrollExtent));
                               },
                               child: Container(
+                                width: MediaQuery.of(context).size.width / 2,
                                 decoration: const BoxDecoration(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)),
@@ -444,13 +457,14 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(4),
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Icon(
                                         Icons.add_circle_outline,
-                                        color:
-                                            Theme.of(context).iconTheme.color,
+                                        color: Colors.white,
+                                        size: 30,
                                       ),
-                                      const SizedBox(width: 5),
+                                      const SizedBox(width: 10),
                                       Text(
                                         'Adicionar nova atividade',
                                         style: GoogleFonts.getFont(
@@ -529,11 +543,13 @@ class _NewPlanScreen extends State<NewPlanScreen> {
           items: [
             BottomNavigationBarItem(
                 icon: Icon(Icons.arrow_circle_left_outlined,
-                    color: Theme.of(context).iconTheme.color),
+                    color: Theme.of(context).iconTheme.color,
+                size: 40,),
                 label: ''),
             BottomNavigationBarItem(
                 icon: Icon(Icons.save_alt_rounded,
-                    color: Theme.of(context).iconTheme.color),
+                    color: Theme.of(context).iconTheme.color,
+                size: 40,),
                 label: ''),
           ],
         ),
@@ -656,7 +672,7 @@ class _NewPlanScreen extends State<NewPlanScreen> {
           ),
           const SizedBox(width: 5),
           Container(
-            width: MediaQuery.of(context).size.width * 0.45,
+            width: MediaQuery.of(context).size.width * 0.55,
             height: MediaQuery.of(context).size.height * 0.12,
             decoration: const BoxDecoration(
               color: Colors.black12,
@@ -670,7 +686,11 @@ class _NewPlanScreen extends State<NewPlanScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(5),
-                  child: Text(activity['name']),
+                  child: Text(activity['name'], style: TextStyle(color: Theme.of(context)
+                      .appBarTheme
+                      .titleTextStyle
+                      ?.color ??
+                      Colors.black,),),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(5),
@@ -678,6 +698,11 @@ class _NewPlanScreen extends State<NewPlanScreen> {
                     activity['description'],
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Theme.of(context)
+                        .appBarTheme
+                        .titleTextStyle
+                        ?.color ??
+                        Colors.black,),
                   ),
                 ),
               ],

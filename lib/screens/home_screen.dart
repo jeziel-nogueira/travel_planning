@@ -122,14 +122,19 @@ class _HomeScreen extends State<HomeScreen>
             String cost = activity['cost'];
 
             return GestureDetector(
-              onTap: (){
-                print('Detect');
+              onTap: () async {
+                final result = await
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => TripPlanPage(
                             isLightTheme: widget.isLightTheme,
                             toggleTheme: widget.toggleTheme, plan: activity)));
+                if (result != null) {
+                  readSavedPlans();
+                }else{
+                  readSavedPlans();
+                }
               },
               child: Card(
                 color: Theme.of(context).appBarTheme.backgroundColor,
