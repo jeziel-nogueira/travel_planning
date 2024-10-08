@@ -59,7 +59,7 @@ O **Travel Planner** é um aplicativo simples para planejar viagens, permitindo 
    ```bash
    $ flutter run
 
-## Cpturas de Tela
+## Capturas de Tela
 ![Screenshot_20240925_120317](https://github.com/user-attachments/assets/847d01a3-1c6d-4bb4-a9f3-2a98c705878f)
 ![Screenshot_20240925_120138](https://github.com/user-attachments/assets/aa68ce1c-2733-4459-8fbb-4b271b7a8fa8)
 ![Screenshot_20240925_120226](https://github.com/user-attachments/assets/29e75ec9-c27f-473b-a375-408f490ca0c0)
